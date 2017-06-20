@@ -9,7 +9,11 @@
 
     function weatherController($http) {
         var vm = this;
+        vm.cities = [];
+        vm.appear = false;
         vm.getWeather = getWeather;
+        
+        
 
         ///////////////////////////////////////////////
 
@@ -20,11 +24,15 @@
                 .then(function (response) {
                     vm.weatherInfo = response.data;
                     console.log(vm.weatherInfo.name);
+                    vm.cities.push(
+                        {
+                            "name" : vm.weatherInfo.name,
+                            "date" : vm.weatherInfo.dt
+                        });
+
                 });
-
+                vm.appear = true;
         }
-
-
 
         activate();
 

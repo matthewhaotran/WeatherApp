@@ -4,6 +4,7 @@
 <head>
     <title>Weather App</title>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 
 
@@ -17,16 +18,18 @@
         </div>
         <!-- /Jumbotron -->
 
-        <!--<ul class="nav nav-pills">
-            <li role="presentation" class="active"><a href="#">San Diego</a></li>
-            <li role="presentation" class="active"><a href="#">New York</a></li>
-            <li role="presentation" class="active"><a href="#">Washington D.C.</a></li>
-        </ul>-->
+        <div class="btn-group" role="group" aria-label="...">
+            <button type="button" class="btn btn-primary" ng-click="weatherCtrl.getWeather('San Diego')">San Diego</button>
+            <button type="button" class="btn btn-primary" ng-click="weatherCtrl.getWeather('New York')">New York</button>
+            <button type="button" class="btn btn-primary" ng-click="weatherCtrl.getWeather('Washington D.C.')">Washington D.C.</button>
+            <button type="button" class="btn btn-primary" ng-click="weatherCtrl.getWeather('London')">London</button>
+            <button type="button" class="btn btn-primary" ng-click="weatherCtrl.getWeather('Tokyo')">Tokyo</button>
+        </div>
 
         <div class="row">
             <div class="col-lg-12">
                 <div class="input-group">
-                    <input type="text" id="term" class="form-control" ng-model="weatherCtrl.term">
+                    <input type="text" id="term" class="form-control" ng-model="weatherCtrl.term" required>
                     <span class="input-group-btn">
                     <button class="btn btn-default" type="button" ng-click="weatherCtrl.getWeather(weatherCtrl.term)">Go!</button>
                 </span>
@@ -39,56 +42,57 @@
 
         <br><br><br>
 
-        <div class="col-md-6">
+        <div class="col-md-6" ng-show="weatherCtrl.appear">
             <div class="panel panel-default panel-info">
                 <div class="panel-heading">
                     <h3 class="panel-title">City Information</h3>
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <h1 class="text-center">{{weatherCtrl.weatherInfo.name}}</h1>
+                        <h1 class="text-center"><img src="http://openweathermap.org/img/w/{{weatherCtrl.weatherInfo.weather[0].icon}}.png">{{weatherCtrl.weatherInfo.name}}</h1>
+                        <p class="text-center">Lat/Long: {{weatherCtrl.weatherInfo.coord.lat}},{{weatherCtrl.weatherInfo.coord.lon}}</p>
                         <hr>
                     </div>
                     <div class="row">
                         <div class="row">
-                            <div class="col-xs-4 text-center">
-                                <div class="well text-center">
-                                    <p> Temperature (F)
-                                        <br> {{weatherCtrl.weatherInfo.main.temp}}</p>
+                            <div class="col-sm-4 text-center">
+                                <div class="text-center">
+                                    <p> <strong>Temperature (F)</strong>
+                                        <br> <strong  style="color:green;">{{weatherCtrl.weatherInfo.main.temp}}</strong></p>
                                 </div>
                             </div>
-                            <div class="col-xs-4 text-center">
-                                <div class="well text-center">
-                                    <p> Pressure
-                                        <br> {{weatherCtrl.weatherInfo.main.pressure}}</p>
+                            <div class="col-sm-4 text-center">
+                                <div class="text-center">
+                                    <p> <strong>Pressure (mb)</strong>
+                                        <br> <strong  style="color:green;"> {{weatherCtrl.weatherInfo.main.pressure}}</strong></p>
                                 </div>
                             </div>
-                            <div class="col-xs-4 text-center">
-                                <div class="well text-center">
-                                    <p>Humidity
-                                        <br> {{weatherCtrl.weatherInfo.main.humidity}}</p>
+                            <div class="col-sm-4 text-center">
+                                <div class="text-center">
+                                    <p><strong>Humidity (%)</strong>
+                                        <br> <strong  style="color:green;"> {{weatherCtrl.weatherInfo.main.humidity}}</strong></p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="row">
-                            <div class="col-xs-4 text-center">
-                                <div class="well text-center">
-                                    <p> Lowest Temp (F)
-                                        <br> {{weatherCtrl.weatherInfo.main.temp_min}}</p>
+                            <div class="col-sm-4 text-center">
+                                <div class="text-center">
+                                    <p> <strong>Lowest Temp (F)</strong>
+                                        <br> <strong  style="color:green;"> {{weatherCtrl.weatherInfo.main.temp_min}}</strong></p>
                                 </div>
                             </div>
-                            <div class="col-xs-4 text-center">
-                                <div class="well text-center">
-                                    <p> Highest Temp (F)
-                                        <br> {{weatherCtrl.weatherInfo.main.temp_max}}</p>
+                            <div class="col-sm-4 text-center">
+                                <div class="text-center">
+                                    <p> <strong>Highest Temp (F)</strong>
+                                        <br> <strong  style="color:green;"> {{weatherCtrl.weatherInfo.main.temp_max}}</strong></p>
                                 </div>
                             </div>
-                            <div class="col-xs-4 text-center">
-                                <div class="well text-center">
-                                    <p>Wind Speed
-                                        <br> {{weatherCtrl.weatherInfo.wind.speed}}</p>
+                            <div class="col-sm-4 text-center">
+                                <div class="text-center">
+                                    <p><strong>Wind Speed</strong>
+                                        <br> <strong  style="color:green;"> {{weatherCtrl.weatherInfo.wind.speed}}</strong></p>
                                 </div>
                             </div>
                         </div>
@@ -97,13 +101,17 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6" ng-show="weatherCtrl.appear">
             <div class="panel panel-default panel-info">
                 <div class="panel-heading">
                     <h3 class="panel-title">Search History</h3>
                 </div>
-                <div class="panel-body">
-
+                <div class="panel-body" id="search-history">
+                    <table class="table table-striped">
+                        <tr ng-repeat="city in weatherCtrl.cities">
+                            <td>{{city.name}}</td><td>{{city.date * 1000 | date: 'shortDate'}}</td><td>{{city.date * 1000 | date: 'shortTime'}}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
