@@ -1,4 +1,4 @@
-(function(){
+(function () {
     'use strict';
 
     angular
@@ -8,21 +8,26 @@
     weatherController.$inject = ['$http'];
 
     function weatherController($http) {
-        /* jshint validthis:true */
         var vm = this;
-        vm.message = 'Hello';
+        vm.getWeather = getWeather;
 
-        $http
-            .get('http://api.openweathermap.org/data/2.5/weather?q=sandiego&units=imperial&apikey=c290bc6fa7278451b2d24d29650191bb')
-            .then(function (response) {
-                vm.weatherInfo = response.data;
-                console.log(vm.weatherInfo.name);
-            });
+        ///////////////////////////////////////////////
+
+        function getWeather(term) {
+
+            $http
+                .get('http://api.openweathermap.org/data/2.5/weather?q=' + term + '&units=imperial&apikey=5e9f84a8d383be947ca6f260e042187f')
+                .then(function (response) {
+                    vm.weatherInfo = response.data;
+                    console.log(vm.weatherInfo.name);
+                });
+
+        }
 
 
 
         activate();
 
-        function activate() { }
+        function activate() {}
     }
 })();
